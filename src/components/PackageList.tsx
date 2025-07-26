@@ -16,7 +16,7 @@ const PackageList: React.FC<PackageListProps> = ({ packages, onPackageSelect }) 
 
     const filteredPackages = packages.filter(pkg => {
         const matchesSearch = pkg.package_id.toLowerCase().includes(searchTerm.toLowerCase());
-        
+
         let matchesStatus = true;
         if (filterStatus !== 'ALL_ACTIVE') {
             matchesStatus = pkg.current_status === filterStatus;
@@ -42,8 +42,8 @@ const PackageList: React.FC<PackageListProps> = ({ packages, onPackageSelect }) 
 
     return (
         <div className="p-4 bg-gray-100 min-h-screen">
-            <h2 className="text-2xl font-bold mb-4 text-gray-800">Active Packages</h2>
-            <div className="flex flex-col sm:flex-row gap-4 mb-4">
+            <h2 className="text-2xl font-bold mb-4 text-gray-800">Aamira Package Tracker</h2>
+            <div className="flex flex-col sm:flex-row gap-4 mb-6">
                 <input
                     type="text"
                     placeholder="Search by Package ID..."
@@ -62,32 +62,55 @@ const PackageList: React.FC<PackageListProps> = ({ packages, onPackageSelect }) 
                     ))}
                 </select>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {filteredPackages.length === 0 ? (
-                    <p className="col-span-full text-center text-gray-600 p-4 bg-white rounded-lg shadow">
-                        No active packages match your criteria.
-                    </p>
-                ) : (
-                    filteredPackages.map((pkg) => (
-                        <div
-                            key={pkg._id}
-                            className={`bg-white p-4 rounded-lg shadow cursor-pointer transition-all duration-200 ease-in-out hover:shadow-md
-                                ${pkg.is_stuck_alert_triggered ? 'border-l-4 border-red-500 bg-red-50' : 'border-l-4 border-blue-400'}`}
-                            onClick={() => onPackageSelect(pkg)}
-                        >
-                            <h3 className="text-xl font-semibold mb-2">{pkg.package_id}</h3>
-                            <p className="text-gray-700">Status: <span className="font-medium">{pkg.current_status.replace(/_/g, ' ')}</span></p>
-                            <p className="text-gray-600 text-sm">Last Update: {calculateTimeSinceLastUpdate(pkg.last_updated)}</p>
-                            {pkg.current_lat !== undefined && pkg.current_lon !== undefined && (
-                                <p className="text-gray-600 text-sm">Location: {pkg.current_lat.toFixed(4)}, {pkg.current_lon.toFixed(4)}</p>
-                            )}
-                            <p className="text-gray-600 text-sm">ETA: {pkg.eta ? new Date(pkg.eta).toLocaleString() : '—'}</p>
-                            {pkg.is_stuck_alert_triggered && (
-                                <p className="text-red-600 font-semibold mt-2">STUCK! Check alerts.</p>
-                            )}
-                        </div>
-                    ))
-                )}
+
+            <div className="overflow-x-auto">
+                <table className="min-w-full bg-white rounded-lg shadow overflow-hidden">
+                    <thead className="bg-blue-100 text-left text-sm font-semibold text-gray-700">
+                        <tr>
+                            <th className="px-4 py-3">#</th>
+                            <th className="px-4 py-3">Package ID</th>
+                            <th className="px-4 py-3">Status</th>
+                            <th className="px-4 py-3">Last Seen</th>
+                            <th className="px-4 py-3">Location</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {filteredPackages.length === 0 ? (
+                            <tr>
+                                <td colSpan={5} className="text-center text-gray-500 py-6">
+                                    No active packages match your criteria.
+                                </td>
+                            </tr>
+                        ) : (
+                            filteredPackages.map((pkg, index) => (
+                                <tr
+                                    key={pkg._id}
+                                    onClick={() => onPackageSelect(pkg)}
+                                    className={`cursor-pointer text-sm transition hover:bg-gray-50 ${
+                                        pkg.is_stuck_alert_triggered ? 'bg-red-50 border-l-4 border-red-500' : ''
+                                    }`}
+                                >
+                                    <td className="px-4 py-3">{index + 1}</td>
+                                    <td className="px-4 py-3 font-medium text-blue-600">{pkg.package_id}</td>
+                                    <td className="px-4 py-3">
+                                        {pkg.current_status.replace(/_/g, ' ')}
+                                        {pkg.is_stuck_alert_triggered && (
+                                            <span className="ml-2 inline-block px-2 py-0.5 text-xs font-semibold text-red-700 bg-red-100 rounded">
+                                                STUCK!
+                                            </span>
+                                        )}
+                                    </td>
+                                    <td className="px-4 py-3">{calculateTimeSinceLastUpdate(pkg.last_updated)}</td>
+                                    <td className="px-4 py-3">
+                                        {pkg.current_lat !== undefined && pkg.current_lon !== undefined
+                                            ? `${pkg.current_lat.toFixed(2)}, ${pkg.current_lon.toFixed(2)}`
+                                            : '—'}
+                                    </td>
+                                </tr>
+                            ))
+                        )}
+                    </tbody>
+                </table>
             </div>
         </div>
     );

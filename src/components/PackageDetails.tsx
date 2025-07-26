@@ -20,12 +20,12 @@ const PackageDetails: React.FC<PackageDetailsProps> = ({ package: pkg, onBack })
                 <h3 className="text-xl font-semibold mb-3">Current Status</h3>
                 <p><strong>Status:</strong> {pkg.current_status.replace(/_/g, ' ')}</p>
                 <p><strong>Last Updated Server Time:</strong> {new Date(pkg.last_updated).toLocaleString()}</p>
-                <p><strong>Status Reported At:</strong> {new Date(pkg.current_status_timestamp).toLocaleString()}</p>
+                <p><strong>Status Reported At:</strong> {new Date(pkg.current_status_timestamp as string).toLocaleString()}</p>
                 {pkg.current_lat !== undefined && pkg.current_lon !== undefined && (
                     <p><strong>Latest Location:</strong> {pkg.current_lat.toFixed(4)}, {pkg.current_lon.toFixed(4)}</p>
                 )}
                 <p><strong>ETA:</strong> {pkg.eta ? new Date(pkg.eta).toLocaleString() : '—'}</p>
-                <p><strong>Received At (First Event):</strong> {new Date(pkg.received_at).toLocaleString()}</p>
+                <p><strong>Received At (First Event):</strong> {new Date(pkg.received_at as string).toLocaleString()}</p>
                 {pkg.is_stuck_alert_triggered && (
                     <p className="text-red-600 font-bold mt-2 text-lg animate-pulse">This package is currently flagged as STUCK!</p>
                 )}

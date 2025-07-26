@@ -57,9 +57,11 @@ function App() {
                 forceRefresh();
             }, 1000);
 
-        } catch (err: any) {
-            console.error('Submission error:', err);
-            setFormError(`Submission failed: ${err.message}`);
+        } catch (err) {
+            if (err instanceof Error) {
+                console.error('Submission error:', err);
+                setFormError(`Submission failed: ${err.message}`);
+            }
         } finally {
             setFormLoading(false);
         }
