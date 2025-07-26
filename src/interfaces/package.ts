@@ -10,25 +10,20 @@ export enum PackageStatus {
 
 export interface IPackageEvent {
     status: PackageStatus;
+    timestamp: string;
     lat?: number;
     lon?: number;
-    timestamp: string;
     note?: string;
 }
 
 export interface IPackage {
-    _id: string;
     package_id: string;
     current_status: PackageStatus;
     current_lat?: number;
     current_lon?: number;
-    current_status_timestamp: string;
-    eta?: string;
-    received_at: string;
     last_updated: string;
     event_history: IPackageEvent[];
-    is_stuck_alert_triggered?: boolean;
-    __v?: number;
+    _id?: string;
 }
 
 export interface IAlert {
@@ -36,10 +31,6 @@ export interface IAlert {
     package_id: string;
     alert_type: string;
     message: string;
+    type: 'info' | 'warning' | 'error';
     timestamp: string;
-    resolved: boolean;
-    resolved_at?: string;
-    createdAt: string;
-    updatedAt: string;
-    __v?: number;
 }

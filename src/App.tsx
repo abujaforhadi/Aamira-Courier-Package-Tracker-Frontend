@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { usePackages } from './hooks/usePackages';
 import PackageList from './components/PackageList';
 import PackageForm from './components/PackageForm';
 import PackageDetails from './components/PackageDetails';
 import AlertDisplay from './components/AlertDisplay';
-import { io } from 'socket.io-client';
 
 import './index.css'; 
 import type { IPackage, PackageStatus } from './interfaces/package';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-const API_KEY = import.meta.env.VITE_API_KEY;
+// const API_KEY = import.meta.env.VITE_API_KEY;
 
 function App() {
     const { packages, alerts, loading, error, forceRefresh } = usePackages();
@@ -37,7 +36,7 @@ function App() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-API-Key': API_KEY,
+                    // 'X-API-Key': API_KEY,
                 },
                 body: JSON.stringify(payload),
             });
